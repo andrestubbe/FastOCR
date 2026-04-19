@@ -82,14 +82,14 @@
 
     <build>
         <resources>
+            <!-- Include native DLL from build directory -->
             <resource>
                 <directory>build</directory>
                 <includes>
                     <include>*.dll</include>
-                    <include>*.so</include>
-                    <include>*.dylib</include>
                 </includes>
             </resource>
+            <!-- Standard resources -->
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
