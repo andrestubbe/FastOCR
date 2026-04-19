@@ -50,6 +50,7 @@ import javax.imageio.ImageIO;
  * @version 1.0.0
  * @since 1.0.0
  * @see <a href="https://github.com/andrestubbe/FastOCR">GitHub Repository</a>
+ * @see <a href="https://github.com/andrestubbe/FastJava">FastJava Ecosystem</a>
  */
 public class FastOCR {
     

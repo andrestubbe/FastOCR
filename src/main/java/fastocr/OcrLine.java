@@ -12,6 +12,7 @@ import java.util.List;
  * @author FastJava Team
  * @version 1.0.0
  * @since 1.0.0
+ * @see <a href="https://github.com/andrestubbe/FastJava">FastJava Ecosystem</a>
  */
 public class OcrLine {
     
