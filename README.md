@@ -152,3 +152,9 @@ MIT License — See [LICENSE](LICENSE)
 ---
 
 **Keywords:** java ocr, fast ocr, native ocr, windows ocr, tesseract java, screen text recognition, image to text java
+
+---
+
+## 🔗 Part of the FastJava Ecosystem
+
+FastOCR is part of [FastJava](https://github.com/andrestubbe/FastJava) — 20+ native Java libraries for maximum performance.
