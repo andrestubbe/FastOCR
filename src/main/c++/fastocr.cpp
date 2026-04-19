@@ -49,6 +49,8 @@
 #include <vector>
 #include <memory>
 #include <cstring>
+#include <sstream>
+#include <algorithm>
 
 #pragma comment(lib, "WindowsApp.lib")
 #pragma comment(lib, "Windowscodecs.lib")
@@ -408,6 +410,112 @@ JNIEXPORT jobjectArray JNICALL Java_fastocr_FastOCR_getAvailableLanguages(JNIEnv
         return result;
     } catch (...) {
         return env->NewObjectArray(0, env->FindClass("java/lang/String"), nullptr);
+    }
+}
+
+/**
+ * Helper: Run detailed OCR and format result as tab-separated data.
+ * Format: fullText\tlineCount\twordCount\tline1Data\tline2Data...\tword1Data\tword2Data...
+ * Line data: x,y,width,height,text
+ * Word data: x,y,width,height,confidence,text
+ */
+std::string RunDetailedOcr(OcrEngine& engine, SoftwareBitmap& bitmap) {
+    try {
+        auto result = engine.RecognizeAsync(bitmap).get();
+        
+        std::ostringstream output;
+        
+        // Full text
+        std::wstring fullText;
+        int totalWords = 0;
+        
+        auto lines = result.Lines();
+        int lineCount = static_cast<int>(lines.Size());
+        
+        // First pass: count words and build full text
+        for (auto line : lines) {
+            if (!fullText.empty()) fullText += L'\n';
+            std::wstring lineText;
+            for (auto word : line.Words()) {
+                if (!lineText.empty()) lineText += L' ';
+                lineText += word.Text();
+                totalWords++;
+            }
+            fullText += lineText;
+        }
+        
+        // Output header: fullText\tlineCount\twordCount
+        output << WStringToUTF8(fullText) << '\t' << lineCount << '\t' << totalWords;
+        
+        // Second pass: output line data
+        for (auto line : lines) {
+            auto words = line.Words();
+            if (words.Size() == 0) continue;
+            
+            // Calculate line bounds from words
+            int minX = INT_MAX, minY = INT_MAX, maxX = 0, maxY = 0;
+            for (auto word : words) {
+                auto rect = word.BoundingRect();
+                minX = std::min(minX, static_cast<int>(rect.X));
+                minY = std::min(minY, static_cast<int>(rect.Y));
+                maxX = std::max(maxX, static_cast<int>(rect.X + rect.Width));
+                maxY = std::max(maxY, static_cast<int>(rect.Y + rect.Height));
+            }
+            
+            // Line format: x,y,width,height,text
+            output << '\t' << minX << ',' << minY << ',' << (maxX - minX) << ',' << (maxY - minY) << ','
+                   << WStringToUTF8(line.Text());
+        }
+        
+        // Third pass: output word data
+        for (auto line : lines) {
+            for (auto word : line.Words()) {
+                auto rect = word.BoundingRect();
+                double confidence = 0.0; // Windows OCR doesn't expose confidence per word in this API version
+                
+                // Word format: x,y,width,height,confidence,text
+                output << '\t' << static_cast<int>(rect.X) << ',' << static_cast<int>(rect.Y) << ','
+                       << static_cast<int>(rect.Width) << ',' << static_cast<int>(rect.Height) << ','
+                       << confidence << ',' << WStringToUTF8(word.Text());
+            }
+        }
+        
+        return output.str();
+    } catch (...) {
+        return "";
+    }
+}
+
+/**
+ * JNI: Perform detailed OCR returning lines with words and positions.
+ */
+JNIEXPORT jstring JNICALL Java_fastocr_FastOCR_recognizeDetailedBytes(
+    JNIEnv* env, jclass clazz, jlong handle,
+    jbyteArray imageData, jint width, jint height, jint channels) {
+    
+    if (handle == 0) {
+        return env->NewStringUTF("");
+    }
+    
+    try {
+        auto* wrapper = reinterpret_cast<OcrEngineWrapper*>(handle);
+        
+        jbyte* pixels = env->GetByteArrayElements(imageData, nullptr);
+        if (!pixels) {
+            return env->NewStringUTF("");
+        }
+        
+        SoftwareBitmap bitmap = CreateBitmapFromBytes(pixels, width, height, channels);
+        env->ReleaseByteArrayElements(imageData, pixels, JNI_ABORT);
+        
+        if (bitmap == nullptr) {
+            return env->NewStringUTF("");
+        }
+        
+        std::string result = RunDetailedOcr(wrapper->engine, bitmap);
+        return env->NewStringUTF(result.c_str());
+    } catch (...) {
+        return env->NewStringUTF("");
     }
 }
 
