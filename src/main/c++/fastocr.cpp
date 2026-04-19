@@ -48,6 +48,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <cstring>
 
 #pragma comment(lib, "WindowsApp.lib")
 #pragma comment(lib, "Windowscodecs.lib")
@@ -56,6 +57,17 @@ using namespace winrt;
 using namespace Windows::Media::Ocr;
 using namespace Windows::Graphics::Imaging;
 using namespace Windows::Storage::Streams;
+
+// Interface for accessing raw bytes from Windows Runtime buffer
+// Required for copying pixel data into SoftwareBitmap
+MIDL_INTERFACE("5B0D3235-4DBA-4D44-865E-8F1D0E4FD04D")
+IMemoryBufferByteAccess : public IUnknown {
+public:
+    virtual HRESULT STDMETHODCALLTYPE GetBuffer(
+        BYTE** value,
+        UINT32* capacity
+    ) = 0;
+};
 
 // Store OcrEngine in a wrapper with proper lifetime management
 struct OcrEngineWrapper {
@@ -83,17 +95,44 @@ std::wstring UTF8ToWString(const char* str) {
 
 // Helper: Create SoftwareBitmap from raw RGBA bytes
 SoftwareBitmap CreateBitmapFromBytes(const jbyte* pixels, jint width, jint height, jint channels) {
-    // Create bitmap in BGRA8 format (what Windows OCR expects)
-    SoftwareBitmap bitmap(BitmapPixelFormat::Bgra8, width, height);
-    
-    // Get buffer and copy pixels
-    BitmapBuffer buffer = bitmap.LockBuffer(BitmapBufferAccessMode::Write);
-    IMemoryBufferReference reference = buffer.CreateReference();
-    
-    // Note: In real implementation, we'd need to properly access the buffer
-    // This is a simplified version - actual implementation needs COM interop
-    
-    return bitmap;
+    try {
+        // Create bitmap in BGRA8 format (what Windows OCR expects)
+        SoftwareBitmap bitmap(BitmapPixelFormat::Bgra8, width, height);
+        
+        // Lock buffer for writing
+        BitmapBuffer buffer = bitmap.LockBuffer(BitmapBufferAccessMode::Write);
+        
+        // Get reference to underlying memory buffer
+        IMemoryBufferReference reference = buffer.CreateReference();
+        
+        // Query for byte access
+        com_ptr<IMemoryBufferByteAccess> byteAccess;
+        HRESULT hr = reference.as(IID_PPV_ARGS(&byteAccess));
+        if (FAILED(hr)) return nullptr;
+        
+        // Get pointer to buffer data
+        BYTE* destPixels = nullptr;
+        UINT32 capacity = 0;
+        hr = byteAccess->GetBuffer(&destPixels, &capacity);
+        if (FAILED(hr) || destPixels == nullptr) return nullptr;
+        
+        // Copy and convert RGBA to BGRA
+        int pixelCount = width * height;
+        for (int i = 0; i < pixelCount; i++) {
+            int srcIdx = i * channels;
+            int destIdx = i * 4;
+            
+            // Convert RGBA to BGRA (Windows format)
+            destPixels[destIdx] = static_cast<BYTE>(pixels[srcIdx + 2]);     // B <- R
+            destPixels[destIdx + 1] = static_cast<BYTE>(pixels[srcIdx + 1]); // G <- G
+            destPixels[destIdx + 2] = static_cast<BYTE>(pixels[srcIdx]);     // R <- B
+            destPixels[destIdx + 3] = static_cast<BYTE>(pixels[srcIdx + 3]); // A <- A
+        }
+        
+        return bitmap;
+    } catch (...) {
+        return nullptr;
+    }
 }
 
 // Helper: Load image file using WIC and create SoftwareBitmap
@@ -144,11 +183,25 @@ SoftwareBitmap LoadImageFile(const wchar_t* filePath) {
     if (FAILED(hr)) return nullptr;
     
     // Create SoftwareBitmap
-    SoftwareBitmap bitmap(BitmapPixelFormat::Bgra8, width, height);
+    SoftwareBitmap bitmap(BitmapPixelFormat::Bgra8, static_cast<int32_t>(width), static_cast<int32_t>(height));
     
-    // Copy pixels to bitmap buffer
+    // Lock buffer for writing
     BitmapBuffer buffer = bitmap.LockBuffer(BitmapBufferAccessMode::Write);
-    // In real implementation: copy pixels to buffer...
+    
+    // Get reference and byte access
+    IMemoryBufferReference reference = buffer.CreateReference();
+    com_ptr<IMemoryBufferByteAccess> byteAccess;
+    HRESULT hrAccess = reference.as(IID_PPV_ARGS(&byteAccess));
+    if (FAILED(hrAccess)) return nullptr;
+    
+    // Get pointer to buffer
+    BYTE* destPixels = nullptr;
+    UINT32 capacity = 0;
+    hr = byteAccess->GetBuffer(&destPixels, &capacity);
+    if (FAILED(hr) || destPixels == nullptr) return nullptr;
+    
+    // Copy pixel data (already in BGRA format from WIC)
+    std::memcpy(destPixels, pixels.data(), pixels.size());
     
     return bitmap;
 }
