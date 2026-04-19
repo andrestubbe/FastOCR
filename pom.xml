@@ -50,27 +50,6 @@
     </repositories>
 
     <dependencies>
-        <!-- FastCore - Unified JNI Loader -->
-        <dependency>
-            <groupId>com.github.andrestubbe</groupId>
-            <artifactId>fastcore</artifactId>
-            <version>v1.0.0</version>
-        </dependency>
-
-        <!-- FastImage - For image processing -->
-        <dependency>
-            <groupId>io.github.andrestubbe</groupId>
-            <artifactId>fastimage</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <!-- FastScreen - For screen capture integration -->
-        <dependency>
-            <groupId>io.github.andrestubbe</groupId>
-            <artifactId>fastscreen</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
         <!-- JUnit 5 for testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -82,9 +61,9 @@
 
     <build>
         <resources>
-            <!-- Include native DLL from build directory -->
+            <!-- Include native DLL from src/main/resources -->
             <resource>
-                <directory>build</directory>
+                <directory>src/main/resources</directory>
                 <includes>
                     <include>*.dll</include>
                 </includes>

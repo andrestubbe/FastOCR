@@ -7,13 +7,13 @@ import java.util.List;
  * Complete OCR result with lines, words, and text.
  * 
  * <p>This is the detailed result from Windows.Media.Ocr containing all
- * recognized text with spatial information. Use this when you need:
+ * recognized text with spatial information. Use this when you need:</p>
  * <ul>
  *   <li>Clickable text locations</li>
  *   <li>Text highlighting/marking</li>
  *   <li>Form field detection</li>
  *   <li>Confidence thresholds</li>
- * </ul></p>
+ * </ul>
  * 
  * <p><b>Structure:</b></p>
  * <pre>

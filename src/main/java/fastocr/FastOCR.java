@@ -1,9 +1,12 @@
 package fastocr;
 
-import fastcore.FastCore;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import javax.imageio.ImageIO;
 
 /**
@@ -19,14 +22,14 @@ import javax.imageio.ImageIO;
  *   <li>10-50ms recognition time (vs 200-500ms for Tesseract4J)</li>
  *   <li>Zero-copy memory management - no heap allocations during OCR</li>
  *   <li>30+ languages supported on Windows (system language packs)</li>
- *   <li>Simple API: create engine → read image → get text</li>
+ *   <li>Simple API: create engine -&gt; read image -&gt; get text</li>
  *   <li>Support for BufferedImage, File, and file paths</li>
  * </ul>
  * 
  * <p><b>Windows Requirements:</b></p>
  * <ul>
  *   <li>Windows 10 version 19041 (20H1) or later</li>
- *   <li>OCR language pack installed (Settings → Time & Language → Language)</li>
+ *   <li>OCR language pack installed (Settings -&gt; Time &amp; Language -&gt; Language)</li>
  * </ul>
  * 
  * <p><b>Basic Usage:</b></p>
@@ -40,6 +43,7 @@ import javax.imageio.ImageIO;
  * 
  * <p><b>Performance Comparison:</b></p>
  * <table>
+ *   <caption>Performance comparison with other OCR libraries</caption>
  *   <tr><th>Library</th><th>Speed</th><th>Memory</th></tr>
  *   <tr><td>FastOCR</td><td>10-50ms</td><td>Zero-copy</td></tr>
  *   <tr><td>Tesseract4J</td><td>200-500ms</td><td>50-100MB</td></tr>
@@ -124,10 +128,39 @@ public class FastOCR {
     private static native String recognizeDetailedBytes(long handle, byte[] imageData, int width, int height, int channels);
     
     /**
-     * Initialize FastOCR library
+     * Initialize FastOCR library - load native DLL from resources
      */
     static {
-        FastCore.loadLibrary(LIBRARY_NAME);
+        loadNativeLibrary();
+    }
+    
+    /**
+     * Load native library from JAR resources
+     */
+    private static void loadNativeLibrary() {
+        try {
+            // Try to load from java.library.path first (for development)
+            System.loadLibrary(LIBRARY_NAME);
+        } catch (UnsatisfiedLinkError e) {
+            // Load from JAR resources
+            try {
+                String libResource = "/" + LIBRARY_NAME + ".dll";
+                try (InputStream in = FastOCR.class.getResourceAsStream(libResource)) {
+                    if (in == null) {
+                        throw new RuntimeException("Native library not found: " + libResource);
+                    }
+                    // Create temp file
+                    Path tempDir = Files.createTempDirectory("fastocr");
+                    Path tempLib = tempDir.resolve(LIBRARY_NAME + ".dll");
+                    Files.copy(in, tempLib, StandardCopyOption.REPLACE_EXISTING);
+                    tempLib.toFile().deleteOnExit();
+                    tempDir.toFile().deleteOnExit();
+                    System.load(tempLib.toString());
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException("Failed to load native library", ex);
+            }
+        }
     }
     
     /**

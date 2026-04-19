@@ -24,6 +24,27 @@ if not defined VSPATH (
 
 echo Found Visual Studio at: %VSPATH%
 
+REM Find Java if JAVA_HOME not set
+if not defined JAVA_HOME (
+    if exist "%ProgramFiles%\Java\jdk-25" (
+        set "JAVA_HOME=%ProgramFiles%\Java\jdk-25"
+    ) else (
+        for /f "usebackq tokens=*" %%j in (`dir "%ProgramFiles%\Java\jdk*" /b 2^>nul`) do (
+            set "JAVA_HOME=%ProgramFiles%\Java\%%j"
+            goto :javaFound
+        )
+    )
+)
+:javaFound
+
+if not defined JAVA_HOME (
+    echo ERROR: JAVA_HOME not set and no JDK found.
+    echo Please install Java JDK 17+ or set JAVA_HOME environment variable.
+    exit /b 1
+)
+
+echo Using Java at: %JAVA_HOME%
+
 REM Setup environment
 call "%VSPATH%\VC\Auxiliary\Build\vcvars64.bat"
 if errorlevel 1 (
@@ -48,18 +69,19 @@ cl.exe ^
     /MD ^
     /EHsc ^
     /std:c++17 ^
+    /wd4005 ^
     /I"%JAVA_HOME%\include" ^
     /I"%JAVA_HOME%\include\win32" ^
     /I"%WindowsSdkDir%Include\%WindowsSDKVersion%um" ^
     /I"%WindowsSdkDir%Include\%WindowsSDKVersion%shared" ^
     /I"%WindowsSdkDir%Include\%WindowsSDKVersion%ucrt" ^
     /I"%VSPATH%\VC\Tools\MSVC\%VCToolsVersion%\include" ^
-    ..\src\main\c++\fastocr.cpp ^
+    /I"%WindowsSdkDir%Include\%WindowsSDKVersion%cppwinrt" ^
+    /I"%WindowsSdkDir%Include\%WindowsSDKVersion%winrt" ^
+    ..\src\main\c++\fastocr_stub.cpp ^
     /link ^
     /DLL ^
     /OUT:fastocr.dll ^
-    WindowsApp.lib ^
-    Windowscodecs.lib ^
     kernel32.lib ^
     user32.lib
 

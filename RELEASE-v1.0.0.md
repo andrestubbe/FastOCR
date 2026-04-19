@@ -25,13 +25,14 @@ https://github.com/andrestubbe/FastOCR/releases/download/v1.0.0/fastocr-1.0.0-fa
 
 ## 🚀 What's New
 
-- ✅ **Native Windows OCR** — Uses Windows.Media.Ocr (GPU accelerated)
-- ✅ **10-50ms Speed** — 10× faster than Tesseract4J
-- ✅ **Zero Dependencies** — No installation required on Windows 10/11
-- ✅ **30+ Languages** — Automatic language support
-- ✅ **Simple API** — `new FastOCR().read("image.png")`
-- ✅ **Detailed API** — `readDetailed()` with word positions & confidence
+- ✅ **Java API** — Complete FastOCR API ready for use
+- ✅ **JNI Bridge** — Native library loading from JAR resources
 - ✅ **Fat JAR** — Includes fastocr.dll, ready to use
+- ✅ **Maven Ready** — Published to JitPack
+
+> **⚠️ Note:** v1.0.0 contains a stub implementation. Full Windows.Media.Ocr 
+> integration with actual OCR functionality is coming in **v1.1**.
+> The API is stable and ready for integration.
 
 ---
 
@@ -39,10 +40,10 @@ https://github.com/andrestubbe/FastOCR/releases/download/v1.0.0/fastocr-1.0.0-fa
 
 | File | Size | Purpose |
 |------|------|---------|
-| `fastocr-1.0.0-fat.jar` | ~250 KB | **RECOMMENDED** — Standalone with embedded DLL |
-| `fastocr-1.0.0.jar` | ~15 KB | Standard JAR (requires external DLL) |
-| `fastocr.dll` | ~200 KB | Native library (x64) |
-| `Source code` | ~100 KB | Full source (zip/tar.gz) |
+| `fastocr-1.0.0-fat.jar` | ~17 KB | **RECOMMENDED** — Standalone with embedded DLL |
+| `fastocr-1.0.0.jar` | ~17 KB | Standard JAR (requires external DLL) |
+| `fastocr.dll` | ~10 KB | Native stub library (x64) |
+| `Source code` | ~50 KB | Full source (zip/tar.gz) |
 
 ---
 
