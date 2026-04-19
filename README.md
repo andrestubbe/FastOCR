@@ -17,8 +17,8 @@
 | **Dependencies** | **None (Windows)** | Tesseract install | Multiple JARs |
 | **Accuracy** | **99%+** | 95-98% | 90-95% |
 
-**Windows:** Uses built-in Windows.Media.Ocr (Windows 10/11 native)  
-**Linux/Mac:** Falls back to Tesseract (requires `tesseract-ocr` package)
+**Windows:** Uses built-in Windows.Media.Ocr (built-in, no dependencies, GPU accelerated)  
+**Linux/Mac:** Planned for future version (Tesseract fallback)
 
 ---
 
