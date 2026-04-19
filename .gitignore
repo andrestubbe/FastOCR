@@ -1,0 +1,38 @@
+# Build outputs
+build/
+target/
+*.dll
+*.so
+*.dylib
+*.class
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Testing
+*.log
+
+# Native build artifacts
+*.obj
+*.o
+*.lib
+*.exp
+*.pdb
+*.ilk
+
+# Release files
+RELEASE.txt
+RELEASE*.md
+TODO.md
