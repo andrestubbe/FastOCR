@@ -5,11 +5,11 @@
 
 ---
 
-## 📦 JAR Download
+## 📦 Fat JAR Download
 
 **Direct Link:**
 ```
-https://github.com/andrestubbe/FastOCR/releases/download/v1.0.0/fastocr-1.0.0.jar
+https://github.com/andrestubbe/FastOCR/releases/download/v1.0.0/fastocr-1.0.0-fat.jar
 ```
 
 **Maven (JitPack):**
@@ -40,7 +40,8 @@ https://github.com/andrestubbe/FastOCR/releases/download/v1.0.0/fastocr-1.0.0.ja
 
 | File | Size | Purpose |
 |------|------|---------|
-| `fastocr-1.0.0.jar` | ~17 KB | **RECOMMENDED** — Standalone with embedded DLL |
+| `fastocr-1.0.0-fat.jar` | ~17 KB | **RECOMMENDED** — Standalone with embedded DLL |
+| `fastocr-1.0.0.jar` | ~17 KB | Standard JAR (requires external DLL) |
 | `fastocr.dll` | ~10 KB | Native stub library (x64) |
 | `Source code` | ~50 KB | Full source (zip/tar.gz) |
 
