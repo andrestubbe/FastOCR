@@ -1,4 +1,4 @@
-﻿# FastOCR â€” Ultra-Fast Native OCR for Java [v0.1.0]
+﻿# FastOCR — Ultra-Fast Native OCR for Java [v0.1.0]
 
 **A high-performance native OCR module for the FastJava ecosystem. Accelerated text recognition via Tesseract and Windows.Media.Ocr.**
 
@@ -17,10 +17,10 @@
 - [License](#license)
 
 ## Features
-- **ðŸ”Ž Native Powered**: High-speed OCR via Tesseract and Windows Media APIs.
-- **âš¡ SIMD Accelerated**: Optimized image pre-processing for higher accuracy.
-- **ðŸ“¦ Zero GC Stalls**: Direct native memory access for image buffers.
-- **ðŸš€ Raw Speed**: Optimized for real-time text discovery in FastRobot.
+- **🔎 Native Powered**: High-speed OCR via Tesseract and Windows Media APIs.
+- **⚡ SIMD Accelerated**: Optimized image pre-processing for higher accuracy.
+- **📦 Zero GC Stalls**: Direct native memory access for image buffers.
+- **🚀 Raw Speed**: Optimized for real-time text discovery in FastRobot.
 
 ## Installation
 
@@ -75,9 +75,9 @@ Download the latest JARs directly to add them to your classpath:
 
 
 ## License
-MIT License â€” See [LICENSE](LICENSE) for details.
+MIT License — See [LICENSE](LICENSE) for details.
 
 ---
-**Part of the FastJava Ecosystem** â€” *Making the JVM faster.*
+**Part of the FastJava Ecosystem** — *Making the JVM faster.*
 
 
