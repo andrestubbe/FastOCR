@@ -1,0 +1,19 @@
+# Primary Languages
+*.java linguist-detectable=true
+*.cpp linguist-detectable=true
+*.h linguist-detectable=true
+
+# Exclude scripts and clutter from language stats
+*.bat linguist-detectable=false
+native/* linguist-detectable=true
+
+# Exclude binary and build files
+*.dll linguist-detectable=false
+*.obj linguist-detectable=false
+*.lib linguist-detectable=false
+*.exp linguist-detectable=false
+build/* linguist-detectable=false
+target/* linguist-detectable=false
+
+# Documentation
+*.md linguist-documentation
