@@ -1,4 +1,4 @@
-# FastOCR — Ultra-Fast Native OCR for Java [v0.1.0]
+﻿# FastOCR â€” Ultra-Fast Native OCR for Java [v0.1.0]
 
 **A high-performance native OCR module for the FastJava ecosystem. Accelerated text recognition via Tesseract and Windows.Media.Ocr.**
 
@@ -17,17 +17,17 @@
 - [License](#license)
 
 ## Features
-- **🔎 Native Powered**: High-speed OCR via Tesseract and Windows Media APIs.
-- **⚡ SIMD Accelerated**: Optimized image pre-processing for higher accuracy.
-- **📦 Zero GC Stalls**: Direct native memory access for image buffers.
-- **🚀 Raw Speed**: Optimized for real-time text discovery in FastRobot.
+- **ðŸ”Ž Native Powered**: High-speed OCR via Tesseract and Windows Media APIs.
+- **âš¡ SIMD Accelerated**: Optimized image pre-processing for higher accuracy.
+- **ðŸ“¦ Zero GC Stalls**: Direct native memory access for image buffers.
+- **ðŸš€ Raw Speed**: Optimized for real-time text discovery in FastRobot.
 
 ## Installation
 
 ### Option 1: Maven (Recommended)
 Add the JitPack repository and the dependencies to your `pom.xml`:
 
-`xml
+```xml
 <repositories>
     <repository>
         <id>jitpack.io</id>
@@ -42,6 +42,7 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
         <artifactId>fastocr</artifactId>
         <version>v0.1.0</version>
     </dependency>
+
     <!-- FastCore (Required Native Loader) -->
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
@@ -49,19 +50,19 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
         <version>v0.1.0</version>
     </dependency>
 </dependencies>
-`
+```
 
 ### Option 2: Gradle (via JitPack)
-`groovy
+```groovy
 repositories {
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    implementation 'com.github.andrestubbe:.1.0'
+    implementation 'com.github.andrestubbe:fastocr:v0.1.0'
     implementation 'com.github.andrestubbe:fastcore:v0.1.0'
 }
-`
+```
 
 ### Option 3: Direct Download (No Build Tool)
 Download the latest JARs directly to add them to your classpath:
@@ -74,9 +75,9 @@ Download the latest JARs directly to add them to your classpath:
 
 
 ## License
-MIT License — See [LICENSE](LICENSE) for details.
+MIT License â€” See [LICENSE](LICENSE) for details.
 
 ---
-**Part of the FastJava Ecosystem** — *Making the JVM faster.*
+**Part of the FastJava Ecosystem** â€” *Making the JVM faster.*
 
 
