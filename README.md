@@ -6,11 +6,15 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
 [![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io/#andrestubbe)
 
+---
+
 **⚡ A high-performance native OCR module for the FastJava ecosystem. Accelerated text recognition via Tesseract and
 Windows.Media.Ocr.**
 
 **FastOCR** delivers elite text recognition performance by leveraging hardware-accelerated native pipelines. Built for
 automation bots and vision tools that need to "read" the screen in milliseconds.
+
+---
 
 [![FastKeyboard Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=BZsqQl7WqWk)
 
