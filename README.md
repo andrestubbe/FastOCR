@@ -97,6 +97,19 @@ Download the latest JARs directly to add them to your classpath:
 MIT License — See [LICENSE](LICENSE) for details.
 
 ---
-**Part of the FastJava Ecosystem** — *Making the JVM faster.*
+
+## Related Projects
+
+- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader for Java
+- [FastAudioPlayer](https://github.com/andrestubbe/FastAudioPlayer) — Native Windows WASAPI Audio Playback for Java
+- [FastTTS](https://github.com/andrestubbe/FastTTS) — High-Performance Native Windows TTS API for Java
+- [FastSTT](https://github.com/andrestubbe/FastSTT) — Ultra-Fast Native Speech-to-Text for Java
+- [FastWakeWord](https://github.com/andrestubbe/FastWakeWord)
+
+---
+
+**Part of the FastJava Ecosystem** — *Making the JVM faster. Small package. Maximum speed. Zero bloat. 🚀📋*
+
+
 
 
