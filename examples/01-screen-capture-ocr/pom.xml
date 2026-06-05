@@ -7,7 +7,7 @@
 
     <groupId>com.github.andrestubbe</groupId>
             <artifactId>fastocr-demo</artifactId>
-            <version>0.1.0</version>
+            <version>v0.1.0</version>
     <packaging>jar</packaging>
 
     <name>FastOCR Demo</name>
@@ -29,8 +29,8 @@
     <dependencies>
         <dependency>
             <groupId>com.github.andrestubbe</groupId>
-            <artifactId>fastocr</artifactId>
-            <version>0.1.0</version>
+            <artifactId>FastOCR</artifactId>
+            <version>v0.1.0</version>
         </dependency>
     </dependencies>
 
