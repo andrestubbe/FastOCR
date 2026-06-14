@@ -1,4 +1,4 @@
-# FastOCR 0.1.0 [ALPHA]  Ultra-Fast Native OCR for Java
+# FastOCR 0.1.0 [ALPHA-2026-06-14] — Ultra-Fast Native OCR for Java
 
 [![Status](https://img.shields.io/badge/status-0.1.0-brightgreen.svg)](https://github.com/andrestubbe/FastOCR/releases/tag/0.1.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -6,17 +6,12 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
 [![JitPack](https://img.shields.io/badge/JitPack-ready-green.svg)](https://jitpack.io/#andrestubbe/FastOCR)
 
----
+**⚡ A high-performance native OCR module for the FastJava ecosystem. Accelerated text recognition via Tesseract and Windows.Media.Ocr.**
 
-**âš¡ A high-performance native OCR module for the FastJava ecosystem. Accelerated text recognition via Tesseract and
-Windows.Media.Ocr.**
-
-**FastOCR** delivers elite text recognition performance by leveraging hardware-accelerated native pipelines. Built for
+FastOCR delivers elite text recognition performance by leveraging hardware-accelerated native pipelines. Built for
 automation bots and vision tools that need to "read" the screen in milliseconds.
 
----
-
-[![FastKeyboard Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=BZsqQl7WqWk)
+[![FastOCR Showcase](docs/screenshot.png)](https://www.youtube.com/watch?v=BZsqQl7WqWk)
 
 ---
 
@@ -24,16 +19,19 @@ automation bots and vision tools that need to "read" the screen in milliseconds.
 
 - [Features](#features)
 - [Installation](#installation)
+- [Documentation](#documentation)
+- [Platform Support](#platform-support)
 - [License](#license)
+- [Related Projects](#related-projects)
 
 ---
 
 ## Features
 
-- **ðŸš€ Native Powered**: High-speed OCR via Tesseract and Windows Media APIs.
-- **? SIMD Accelerated**: Optimized image pre-processing for higher accuracy.
-- **ðŸš€ Zero GC Stalls**: Direct native memory access for image buffers.
-- **ðŸš€ Raw Speed**: Optimized for real-time text discovery in FastRobot.
+- 🔍 **Native Powered** — High-speed OCR via Tesseract and Windows Media APIs.
+- ⚡ **SIMD Accelerated** — Optimized image pre-processing for higher accuracy.
+- 🚀 **Zero GC Stalls** — Direct native memory access for image buffers.
+- 📈 **Raw Speed** — Optimized for real-time text discovery in FastRobot pipelines.
 
 ---
 
@@ -44,7 +42,6 @@ automation bots and vision tools that need to "read" the screen in milliseconds.
 Add the JitPack repository and the dependencies to your `pom.xml`:
 
 ```xml
-
 <repositories>
     <repository>
         <id>jitpack.io</id>
@@ -53,19 +50,19 @@ Add the JitPack repository and the dependencies to your `pom.xml`:
 </repositories>
 
 <dependencies>
-<!-- FastOCR Library -->
-<dependency>
-    <groupId>com.github.andrestubbe</groupId>
-    <artifactId>fastocr</artifactId>
-    <version>0.1.0</version>
-</dependency>
+    <!-- FastOCR Library -->
+    <dependency>
+        <groupId>com.github.andrestubbe</groupId>
+        <artifactId>FastOCR</artifactId>
+        <version>0.1.0</version>
+    </dependency>
 
-<!-- FastCore (Required Native Loader) -->
-<dependency>
-    <groupId>com.github.andrestubbe</groupId>
-    <artifactId>fastcore</artifactId>
-    <version>0.1.0</version>
-</dependency>
+    <!-- FastCore (Required Native Loader) -->
+    <dependency>
+        <groupId>com.github.andrestubbe</groupId>
+        <artifactId>FastCore</artifactId>
+        <version>0.1.0</version>
+    </dependency>
 </dependencies>
 ```
 
@@ -77,8 +74,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.andrestubbe:fastocr:0.1.0'
-    implementation 'com.github.andrestubbe:fastcore:0.1.0'
+    implementation 'com.github.andrestubbe:FastOCR:0.1.0'
+    implementation 'com.github.andrestubbe:FastCore:0.1.0'
 }
 ```
 
@@ -86,10 +83,8 @@ dependencies {
 
 Download the latest JARs directly to add them to your classpath:
 
-1. ðŸš€ **[fastocr-0.1.0.jar](https://github.com/andrestubbe/FastOCR/releases/download/0.1.0/fastocr-0.1.0.jar)** (The
-   Core Library)
-2. ðŸš€ **[fastcore-0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/0.1.0/fastcore-0.1.0.jar)** (
-   The Mandatory Native Loader)
+1. 📦 **[fastocr-0.1.0.jar](https://github.com/andrestubbe/FastOCR/releases/download/0.1.0/fastocr-0.1.0.jar)** (The Core Library)
+2. ⚙️ **[fastcore-0.1.0.jar](https://github.com/andrestubbe/FastCore/releases/download/0.1.0/fastcore-0.1.0.jar)** (The Mandatory Native Loader)
 
 > [!IMPORTANT]
 > All JARs must be in your classpath for the native JNI calls to function correctly.
@@ -98,8 +93,8 @@ Download the latest JARs directly to add them to your classpath:
 
 ## Documentation
 
-* **[COMPILE.md](COMPILE.md)**: Full compilation guide (MSVC C++17 build chain + JNI Setup).
-* **[REFERENCE.md](docs/REFERENCE.md)**: Full API descriptions, border configurations, and codepoint index.
+* **[COMPILE.md](docs/COMPILE.md)**: Full compilation guide (MSVC C++17 build chain + JNI Setup).
+* **[REFERENCE.md](docs/REFERENCE.md)**: Full API descriptions and method reference.
 * **[PHILOSOPHY.md](docs/PHILOSOPHY.md)**: The engineering rationale for zero-allocation performance.
 * **[ROADMAP.md](docs/ROADMAP.md)**: Future milestones and planned features.
 
@@ -107,33 +102,28 @@ Download the latest JARs directly to add them to your classpath:
 
 ## Platform Support
 
-| Platform      | Status            |
-|---------------|-------------------|
-| Windows 10/11 | ? Fully Supported |
-| Linux         | ðŸš€ Planned        |
-| macOS         | ðŸš€ Planned        |
+| Platform      | Status             |
+|---------------|--------------------|
+| Windows 10/11 | ✅ Fully Supported  |
+| Linux         | 🚧 Planned         |
+| macOS         | 🚧 Planned         |
 
 ---
 
 ## License
 
-MIT License  See [LICENSE](LICENSE) for details.
+MIT License — See [LICENSE](LICENSE) for details.
 
 ---
-
 
 ## Related Projects
 
-- [FastCore](https://github.com/andrestubbe/FastCore)  Native Library Loader for Java
-- [FastAudioPlayer](https://github.com/andrestubbe/FastAudioPlayer)  Native Windows WASAPI Audio Playback for Java
-- [FastTTS](https://github.com/andrestubbe/FastTTS)  High-Performance Native Windows TTS API for Java
-- [FastSTT](https://github.com/andrestubbe/FastSTT)  Ultra-Fast Native Speech-to-Text for Java
-- [FastWakeWord](https://github.com/andrestubbe/FastWakeWord)
+- [FastCore](https://github.com/andrestubbe/FastCore) — Native Library Loader for Java
+- [FastImage](https://github.com/andrestubbe/FastImage) — Ultra-Fast Native Image Processing for Java
+- [FastScreen](https://github.com/andrestubbe/FastScreen) — Native Screen Capture for Java
+- [FastTTS](https://github.com/andrestubbe/FastTTS) — High-Performance Native Windows TTS API for Java
+- [FastSTT](https://github.com/andrestubbe/FastSTT) — Ultra-Fast Native Speech-to-Text for Java
+- [FastWakeWord](https://github.com/andrestubbe/FastWakeWord) — Native Wake Word Detection for Java
 
 ---
-
-**Part of the FastJava Ecosystem**  *Making the JVM faster. Small package. Maximum speed. Zero bloat. ðŸš€ðŸš€*
-
-
-
-
+**Part of the FastJava Ecosystem** — *Making the JVM faster. ⚡*
