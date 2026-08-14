@@ -1,29 +1,7 @@
-# The Philosophy of FastXXX
+# FastOCR Design Philosophy
 
-> [!IMPORTANT]
-> **"Keine Kopien. Niemals. Kritischer JNI-Pfad. Native-First Performance."**
+`FastOCR` is built around three fundamental architectural principles:
 
-FastXXX is built on the principle that modern Java applications require **native-first** acceleration for performance-critical operations that the standard JVM APIs don't fully optimize.
-
-## Core Tenets
-
-1.  **Native-First Execution**
-    Bypass standard Java layers to reach the physical limits of the hardware using hand-tuned C++ and SIMD intrinsics.
-
-2.  **Zero-Copy JNI Architecture**
-    Minimize JNI transition costs by using direct memory access patterns and avoiding implicit memory copies between the JVM and the native layer.
-
-3.  **Deterministic Latency**
-    Eliminate variance caused by JIT warm-up or garbage collection stalls in critical hot-paths.
-
-4.  **Hardware-Aware Optimization**
-    Leverage modern CPU features (AVX, SSE, NEON) to process data at hardware-native speeds.
-
-5.  **Blueprint Consistency**
-    As part of the **FastJava** ecosystem, FastXXX adheres to a standardized architecture:
-    *   **Native Backend**: Direct C++ implementation.
-    *   **Unified Loading**: Powered by `FastCore`.
-    *   **Premium Quality**: Built for high-performance systems and autonomous agents.
-
----
-**⚡ FastXXX — Powering the next generation of Native Java.**
+1. **Zero-Copy Memory Transfers**: Directly maps Java pixel byte buffers into Windows native COM OCR memory frames to eliminate JVM heap garbage collection pauses.
+2. **Hardware Acceleration First**: Prioritizes built-in GPU/NPU Windows Media OCR pipelines and AVX2 SIMD instructions over slow CPU software OCR loops.
+3. **Ergonomic Java Interface**: Provides clean AutoCloseable Java APIs without exposing C++ pointers or COM reference management complexity.

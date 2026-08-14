@@ -25,10 +25,15 @@ import fastocr.OcrResult;
 public class Demo {
     public static void main(String[] args) {
         // Initialize FastOCR engine for English
-        try (FastOCR ocr = new FastOCR("en")) {
+        try {
+            FastOCR ocr = new FastOCR("en");
             // Read text directly from image file
             OcrResult result = ocr.read("document.png");
-            System.out.println("Recognized Text:\n" + result.getText());
+            System.out.println("Recognized Text:
+" + result.getText());
+            ocr.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
@@ -42,7 +47,7 @@ public class Demo {
 - [Key Features](#key-features)
 - [Real-World Use Cases](#real-world-use-cases)
 - [Performance Benchmarks](#performance-benchmarks)
-- [API Reference](#api-reference)
+- [API Quick Reference](#api-quick-reference)
 - [Installation](#installation)
 - [Documentation](#documentation)
 - [Platform Support](#platform-support)
@@ -97,34 +102,11 @@ JMH_OCR.benchmarkFastOCRInit  thrpt    2  2,947,478          ops/s
 
 | Method | Description | Path |
 |--------|-------------|------|
-| `new FastOCR(lang)` | Initialize native Windows OCR engine. | [Reference 📖](docs/REFERENCE.md#fastocrstring-language) |
+| `new FastOCR(lang)` | Initialize native Windows OCR engine. | [Reference 📖](docs/REFERENCE.md#1-fastocr-engine-api) |
 | `read(image)` | Recognize text from `BufferedImage` or File. | [Reference 📖](docs/REFERENCE.md#readbufferedimage-image) |
 | `close()` | Release native OCR engine handles. | [Reference 📖](docs/REFERENCE.md#close) |
-| `getText()` | Retrieve recognized text string. | [Reference 📖](docs/REFERENCE.md#gettext) |
-| `getLines()` | Retrieve list of `OcrLine` geometry bounds. | [Reference 📖](docs/REFERENCE.md#getlines) |
-
-
-### Core Classes
-
-#### `FastOCR` — Main OCR Engine
-
-- `new FastOCR(language)` — Initialize native OCR engine for target language (e.g., `"en"`, `"de"`).
-- `read(BufferedImage)` — Recognize text from an in-memory Java image.
-- `read(File)` — Recognize text directly from a file path.
-- `read(String path)` — Recognize text from a image filepath string.
-- `close()` — Release native resources and OCR handles.
-
-#### `OcrResult` — Recognized Text Container
-
-- `getText()` — Get full recognized text string with line breaks.
-- `getLines()` — Get list of recognized `OcrLine` instances.
-- `getWords()` — Get list of recognized `OcrWord` tokens.
-
-#### `OcrLine` & `OcrWord` — Geometry & Confidence
-
-- `getWords()` — Get words belonging to the line.
-- `getBoundingBox()` — Get bounding rectangle `Rectangle(x, y, w, h)`.
-- `getConfidence()` — Get recognition confidence score (0.0 to 1.0).
+| `getText()` | Retrieve recognized text string. | [Reference 📖](docs/REFERENCE.md#2-ocrresult-container-api) |
+| `getLines()` | Retrieve list of `OcrLine` geometry bounds. | [Reference 📖](docs/REFERENCE.md#3-geometry--metadata-api-ocrline--ocrword) |
 
 ---
 

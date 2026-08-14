@@ -26,12 +26,6 @@ public OcrResult read(BufferedImage image) throws Exception
 ```
 Performs text recognition on an in-memory Java `BufferedImage` using direct native pixel buffer mapping.
 
-#### Parameters:
-- **`image`** (`BufferedImage`): In-memory image instance to recognize.
-
-#### Returns:
-- **`OcrResult`**: Container holding recognized text lines, words, geometry bounding boxes, and confidence scores.
-
 ---
 
 ### `read(File file)`
