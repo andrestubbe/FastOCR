@@ -1,99 +1,65 @@
 @echo off
-REM Build script for FastOCR native DLL
-REM Requires: Visual Studio 2019+ with C++ workload
+setlocal enabledelayedexpansion
 
-echo === FastOCR Native Build ===
-echo.
+echo ========================================
+echo FastOCR Native Library Builder (AVX2)
+echo ========================================
 
-REM Find Visual Studio installation
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
-if not exist "%VSWHERE%" (
-    echo ERROR: vswhere.exe not found. Install Visual Studio 2019+.
-    exit /b 1
-)
+if not exist "%VSWHERE%" set "VSWHERE=%ProgramFiles%\Microsoft Visual Studio\Installer\vswhere.exe"
 
-REM Get VS installation path
-for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do (
-    set "VSPATH=%%i"
-)
-
-if not defined VSPATH (
-    echo ERROR: Visual Studio with C++ tools not found.
-    exit /b 1
-)
-
-echo Found Visual Studio at: %VSPATH%
-
-REM Find Java if JAVA_HOME not set
-if not defined JAVA_HOME (
-    if exist "%ProgramFiles%\Java\jdk-25" (
-        set "JAVA_HOME=%ProgramFiles%\Java\jdk-25"
-    ) else (
-        for /f "usebackq tokens=*" %%j in (`dir "%ProgramFiles%\Java\jdk*" /b 2^>nul`) do (
-            set "JAVA_HOME=%ProgramFiles%\Java\%%j"
-            goto :javaFound
-        )
+if exist "%VSWHERE%" (
+    for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do (
+        set "VS_PATH=%%i"
     )
 )
-:javaFound
+
+if not defined VS_PATH (
+    if exist "C:\Program Files\Microsoft Visual Studio\18\Community" set "VS_PATH=C:\Program Files\Microsoft Visual Studio\18\Community"
+)
+
+if not defined VS_PATH (
+    echo [ERROR] Visual Studio with C++ tools not found!
+    exit /b 1
+)
+
+echo Found Visual Studio at: %VS_PATH%
 
 if not defined JAVA_HOME (
-    echo ERROR: JAVA_HOME not set and no JDK found.
-    echo Please install Java JDK 17+ or set JAVA_HOME environment variable.
-    exit /b 1
+    if exist "C:\Program Files\Java\jdk-25.0.3" (
+        set "JAVA_HOME=C:\Program Files\Java\jdk-25.0.3"
+    ) else if exist "C:\Program Files\Java\jdk-21" (
+        set "JAVA_HOME=C:\Program Files\Java\jdk-21"
+    ) else if exist "C:\Program Files\Java\jdk-17" (
+        set "JAVA_HOME=C:\Program Files\Java\jdk-17"
+    )
 )
 
-echo Using Java at: %JAVA_HOME%
+echo Using JAVA_HOME: %JAVA_HOME%
 
-REM Setup environment
-call "%VSPATH%\VC\Auxiliary\Build\vcvars64.bat"
-if errorlevel 1 (
-    echo ERROR: Failed to setup build environment
-    exit /b 1
-)
+call "%VS_PATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
 
-REM Create build directory
-if not exist build mkdir build
-cd build
+if not exist "build" mkdir build
+if not exist "src\main\resources\native" mkdir "src\main\resources\native"
+if not exist "src\main\resources\win32-x86-64" mkdir "src\main\resources\win32-x86-64"
+if not exist "target\classes\native" mkdir "target\classes\native"
 
-echo.
-echo Building fastocr.dll...
-echo.
-
-REM Compile with cl.exe
-REM Note: This is a simplified version. Real build needs proper WinRT support
-cl.exe ^
-    /nologo ^
-    /W3 ^
-    /O2 ^
-    /MD ^
-    /EHsc ^
-    /std:c++17 ^
-    /wd4005 ^
+cl.exe /nologo /O2 /arch:AVX2 /std:c++17 /MD /LD /D_CRT_SECURE_NO_WARNINGS ^
     /I"%JAVA_HOME%\include" ^
     /I"%JAVA_HOME%\include\win32" ^
-    /I"%WindowsSdkDir%Include\%WindowsSDKVersion%um" ^
-    /I"%WindowsSdkDir%Include\%WindowsSDKVersion%shared" ^
-    /I"%WindowsSdkDir%Include\%WindowsSDKVersion%ucrt" ^
-    /I"%VSPATH%\VC\Tools\MSVC\%VCToolsVersion%\include" ^
-    /I"%WindowsSdkDir%Include\%WindowsSDKVersion%cppwinrt" ^
-    /I"%WindowsSdkDir%Include\%WindowsSDKVersion%winrt" ^
-    ..\src\main\c++\fastocr_stub.cpp ^
-    /link ^
-    /DLL ^
-    /OUT:fastocr.dll ^
-    kernel32.lib ^
-    user32.lib
+    /I"..\FastSIMD\src\main\native" ^
+    src\main\c++\fastocr_stub.cpp ^
+    /Fo:build\fastocr.obj ^
+    /link /DLL /OUT:build\fastocr.dll user32.lib gdi32.lib shcore.lib advapi32.lib dwmapi.lib
 
 if errorlevel 1 (
-    echo.
-    echo ERROR: Build failed
+    echo [ERROR] Compilation failed!
     exit /b 1
 )
 
+copy /Y build\fastocr.dll src\main\resources\native\fastocr.dll
+copy /Y build\fastocr.dll src\main\resources\win32-x86-64\fastocr.dll
+copy /Y build\fastocr.dll target\classes\native\fastocr.dll
+
 echo.
-echo === Build successful ===
-echo Output: build\fastocr.dll
-echo.
-echo Now run: mvn clean package
-cd ..
+echo [SUCCESS] DLL built and copied to resources!
