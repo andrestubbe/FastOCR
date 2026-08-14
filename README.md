@@ -93,7 +93,16 @@ JMH_OCR.benchmarkFastOCRInit  thrpt    2  2,947,478          ops/s
 
 ---
 
-## API Reference
+## API Quick Reference
+
+| Method | Description | Path |
+|--------|-------------|------|
+| `new FastOCR(lang)` | Initialize native Windows OCR engine. | [Reference 📖](docs/REFERENCE.md#fastocrstring-language) |
+| `read(image)` | Recognize text from `BufferedImage` or File. | [Reference 📖](docs/REFERENCE.md#readbufferedimage-image) |
+| `close()` | Release native OCR engine handles. | [Reference 📖](docs/REFERENCE.md#close) |
+| `getText()` | Retrieve recognized text string. | [Reference 📖](docs/REFERENCE.md#gettext) |
+| `getLines()` | Retrieve list of `OcrLine` geometry bounds. | [Reference 📖](docs/REFERENCE.md#getlines) |
+
 
 ### Core Classes
 
