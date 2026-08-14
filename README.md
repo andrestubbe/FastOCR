@@ -28,8 +28,7 @@ public class Demo {
         try (FastOCR ocr = new FastOCR("en")) {
             // Read text directly from image file
             OcrResult result = ocr.read("document.png");
-            System.out.println("Recognized Text:
-" + result.getText());
+            System.out.println("Recognized Text:\n" + result.getText());
         }
     }
 }
