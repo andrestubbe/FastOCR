@@ -98,15 +98,36 @@ JMH_OCR.benchmarkFastOCRInit  thrpt    2  2,947,478          ops/s
 
 ---
 
-## API Quick Reference
+## API Reference
 
-| Method | Description | Path |
-|--------|-------------|------|
-| `new FastOCR(lang)` | Initialize native Windows OCR engine. | [Reference 📖](docs/REFERENCE.md#1-fastocr-engine-api) |
-| `read(image)` | Recognize text from `BufferedImage` or File. | [Reference 📖](docs/REFERENCE.md#readbufferedimage-image) |
-| `close()` | Release native OCR engine handles. | [Reference 📖](docs/REFERENCE.md#close) |
-| `getText()` | Retrieve recognized text string. | [Reference 📖](docs/REFERENCE.md#2-ocrresult-container-api) |
-| `getLines()` | Retrieve list of `OcrLine` geometry bounds. | [Reference 📖](docs/REFERENCE.md#3-geometry--metadata-api-ocrline--ocrword) |
+### Core Classes
+
+#### `FastOCR` — Main OCR Engine
+
+- `new FastOCR(language)` — Initialize native Windows OCR engine for target language (e.g., `"en"`, `"de"`).
+- `read(BufferedImage)` — Recognize text from an in-memory Java image.
+- `read(File)` — Recognize text directly from a file path.
+- `read(String path)` — Recognize text from a image filepath string.
+- `close()` — Release native resources and OCR handles.
+
+#### `OcrResult` — Recognized Text Container
+
+- `getText()` — Get full recognized text string with line breaks.
+- `getLines()` — Get list of recognized `OcrLine` instances.
+- `getWords()` — Get list of recognized `OcrWord` tokens.
+
+#### `OcrLine` — Line Geometry & Words
+
+- `getWords()` — Get list of `OcrWord` tokens belonging to this line.
+- `getText()` — Get full line text string.
+- `getBoundingBox()` — Get bounding rectangle `Rectangle(x, y, w, h)`.
+
+#### `OcrWord` — Word Geometry & Confidence Hints
+
+- `getText()` — Recognized word string token.
+- `getBoundingBox()` — Bounding box rectangle `Rectangle(x, y, w, h)` on source image.
+- `getConfidence()` — Recognition confidence score (`0.0f` to `1.0f`).
+- `getCenterX()`, `getCenterY()` — Center pixel coordinates (ideal for automated click targets in **[FastRobot](https://github.com/andrestubbe/FastRobot)**).
 
 ---
 
