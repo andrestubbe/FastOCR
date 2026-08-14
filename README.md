@@ -12,7 +12,7 @@
 
 `FastOCR` provides native Windows `Windows.Media.Ocr` JNI bindings with AVX2 SIMD image preprocessing, enabling sub-50ms text recognition on screen captures, images, and document streams with zero GC pressure.
 
-![Showcase](docs/screenshot.png)
+![Showcase](https://raw.githubusercontent.com/andrestubbe/FastOCR/main/docs/screenshot.png)
 
 ---
 
