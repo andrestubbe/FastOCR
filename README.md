@@ -47,7 +47,7 @@ public class Demo {
 - [Key Features](#key-features)
 - [Real-World Use Cases](#real-world-use-cases)
 - [Performance Benchmarks](#performance-benchmarks)
-- [API Quick Reference](#api-quick-reference)
+- [API Reference](#api-reference)
 - [Installation](#installation)
 - [Documentation](#documentation)
 - [Platform Support](#platform-support)
