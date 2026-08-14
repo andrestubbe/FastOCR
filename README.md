@@ -182,6 +182,7 @@ dependencies {
 
 ## Documentation
 
+- **[CHANGELOG.md](docs/CHANGELOG.md)**: Version history and release notes.
 - **[COMPILE.md](docs/COMPILE.md)**: Full compilation guide (MSVC C++17 build chain + JNI Setup).
 - **[REFERENCE.md](docs/REFERENCE.md)**: Full API contracts and routing logic.
 - **[PHILOSOPHY.md](docs/PHILOSOPHY.md)**: Off-heap zero-GC memory philosophy.
