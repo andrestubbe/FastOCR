@@ -64,6 +64,13 @@ Standard Java OCR implementations like Tesseract4J suffer from heavy JNA overhea
 - **`FastSIMD` Image Preprocessing** — AVX2 256-bit vectorization for instant binarization, thresholding, and grayscale conversion.
 - **Zero-Copy Memory Management** — Direct native buffer access bypassing JVM Garbage Collection heap allocations.
 
+| Feature | Tesseract4J (Tess4J) | Cloud Vision API | FastOCR |
+|:---|:---|:---|:---|
+| **Recognition Latency**| 200–500 ms (CPU bound) | 300–1,500 ms (Network RTT) | **10–50 ms (Hardware accelerated)** |
+| **Dependencies & Weights**| Massive traineddata files (50MB+)| Cloud credentials & internet | **Windows 10/11 built-in (0 MB data)** |
+| **Image Preprocessing**| Slow scalar Java loops | Cloud server pipeline | **AVX2 SIMD binarization & threshold** |
+| **Heap / GC Overhead** | Heavy JNA struct allocations | JSON/HTTP request garbage | **Zero GC (Direct native buffer ops)** |
+
 ---
 
 ## Key Features
