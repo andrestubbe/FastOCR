@@ -8,9 +8,9 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class JMH_OCR {
+public class Benchmark {
 
-    @Benchmark
+    @org.openjdk.jmh.annotations.Benchmark
     public void benchmarkFastOCRInit() {
         try {
             FastOCR ocr = new FastOCR("en");

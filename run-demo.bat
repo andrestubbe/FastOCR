@@ -1,15 +1,30 @@
 @echo off
-echo [FastOCR] Building Native Library...
+setlocal
+chcp 65001 > nul
+cd /d "%~dp0"
+
+echo ===================================================
+echo  FastOCR Demo
+echo ===================================================
+echo [1/3] Building Native Library...
 call compile.bat
-if errorlevel 1 exit /b 1
+if %ERRORLEVEL% NEQ 0 (
+    echo [ERROR] Native build failed!
+    pause
+    exit /b %ERRORLEVEL%
+)
 
-echo [FastOCR] Building Core Project...
-call mvn clean package -DskipTests -q
-if errorlevel 1 exit /b 1
+echo [2/3] Building Core Project...
+call mvn clean install -DskipTests -q
+if %ERRORLEVEL% NEQ 0 (
+    echo [ERROR] Core build failed!
+    pause
+    exit /b %ERRORLEVEL%
+)
 
-echo [FastOCR] Running Demo...
+echo [3/3] Running Demo...
 cd examples\Demo
-call mvn package -DskipTests -q
-java -cp "target\demo-0.1.1.jar;..\..\target\FastOCR-0.1.1.jar" fastocr.demo.Demo
+call mvn clean package -DskipTests -q
+java "-Djava.library.path=..\..\release;..\..\src\main\resources\native" -cp "target\demo-0.1.1.jar;..\..\target\FastOCR-0.1.1.jar" fastocr.demo.Demo
 cd ..\..
 pause

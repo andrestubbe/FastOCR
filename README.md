@@ -16,7 +16,7 @@
 
 ---
 
-## Quick Start — Example
+## Quick Start
 
 ```java
 import fastocr.FastOCR;
@@ -29,8 +29,7 @@ public class Demo {
             FastOCR ocr = new FastOCR("en");
             // Read text directly from image file
             OcrResult result = ocr.read("document.png");
-            System.out.println("Recognized Text:
-" + result.getText());
+            System.out.println("Recognized Text: " + result.getText());
             ocr.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,7 +46,8 @@ public class Demo {
 - [Key Features](#key-features)
 - [Real-World Use Cases](#real-world-use-cases)
 - [Performance Benchmarks](#performance-benchmarks)
-- [API Reference](#api-reference)
+- [API Quick Reference](#api-quick-reference)
+- [Technical Demos & Benchmarks](#technical-demos--benchmarks)
 - [Installation](#installation)
 - [Documentation](#documentation)
 - [Platform Support](#platform-support)
@@ -97,44 +97,48 @@ Standard Java OCR implementations like Tesseract4J suffer from heavy JNA overhea
 In the official [JMH Benchmark](examples/Benchmark), `FastOCR` measured throughput for native engine operations:
 
 ```text
-Benchmark                      Mode  Cnt        Score   Error  Units
-JMH_OCR.benchmarkFastOCRInit  thrpt    2  2,947,478          ops/s
+Benchmark                        Mode  Cnt        Score   Error  Units
+Benchmark.benchmarkFastOCRInit  thrpt    2  1,109,569          ops/s
 ```
 
-> **2.94+ Million Ops / sec**: `FastOCR` initializes and manages native OCR contexts at **2.94 Million operations per second** with **10–50ms recognition latency**.
+> **1.10+ Million Ops / sec**: `FastOCR` initializes and manages native OCR contexts at **1.1+ Million operations per second** with **10–50ms recognition latency**.
 
 ---
 
-## API Reference
+## API Quick Reference
 
-### Core Classes
+### Core Engine & Recognition
+| Method | Return Type | Description | Docs |
+|:---|:---|:---|:---|
+| `new FastOCR(language)` | `FastOCR` | Initialize native Windows OCR engine for target language (e.g. `"en"`, `"de"`). | [Reference](docs/REFERENCE.md) |
+| `read(BufferedImage)` | `String` | Recognize text from an in-memory Java `BufferedImage`. | [Reference](docs/REFERENCE.md) |
+| `read(File)` | `String` | Recognize text directly from a file handle. | [Reference](docs/REFERENCE.md) |
+| `read(String path)` | `String` | Recognize text from an image filepath string. | [Reference](docs/REFERENCE.md) |
+| `isOcrAvailable()` | `boolean` | Check if native Windows Media OCR is supported on this system. | [Reference](docs/REFERENCE.md) |
+| `getSupportedLanguages()` | `String[]` | Query array of installed OS language OCR codes. | [Reference](docs/REFERENCE.md) |
+| `close()` | `void` | Release native OCR handles and resources. | [Reference](docs/REFERENCE.md) |
 
-#### `FastOCR` — Main OCR Engine
+### Geometry & Result Primitives
+| Class / Method | Return Type | Description | Docs |
+|:---|:---|:---|:---|
+| `OcrResult.getText()` | `String` | Complete recognized text string with preserved newlines. | [Reference](docs/REFERENCE.md) |
+| `OcrResult.getLines()` | `List<OcrLine>` | Unmodifiable list of recognized text lines in reading order. | [Reference](docs/REFERENCE.md) |
+| `OcrResult.getWords()` | `List<OcrWord>` | Unmodifiable list of all recognized individual word tokens. | [Reference](docs/REFERENCE.md) |
+| `OcrLine.getBoundingBox()` | `Rectangle` | Bounding rectangle (`x`, `y`, `width`, `height`) of the line. | [Reference](docs/REFERENCE.md) |
+| `OcrWord.getBoundingBox()` | `Rectangle` | Bounding box of the single recognized word on source image. | [Reference](docs/REFERENCE.md) |
+| `OcrWord.getConfidence()` | `float` | Recognition confidence score (`0.0f` to `1.0f`). | [Reference](docs/REFERENCE.md) |
+| `OcrWord.getCenterX()`, `getCenterY()` | `int` | Exact center pixel coordinates (click target for UI bots). | [Reference](docs/REFERENCE.md) |
 
-- `new FastOCR(language)` — Initialize native Windows OCR engine for target language (e.g., `"en"`, `"de"`).
-- `read(BufferedImage)` — Recognize text from an in-memory Java image.
-- `read(File)` — Recognize text directly from a file path.
-- `read(String path)` — Recognize text from a image filepath string.
-- `close()` — Release native resources and OCR handles.
+---
 
-#### `OcrResult` — Recognized Text Container
+## Technical Demos & Benchmarks
 
-- `getText()` — Get full recognized text string with line breaks.
-- `getLines()` — Get list of recognized `OcrLine` instances.
-- `getWords()` — Get list of recognized `OcrWord` tokens.
+Run standalone verification demos or execute JMH throughput microbenchmarks:
 
-#### `OcrLine` — Line Geometry & Words
-
-- `getWords()` — Get list of `OcrWord` tokens belonging to this line.
-- `getText()` — Get full line text string.
-- `getBoundingBox()` — Get bounding rectangle `Rectangle(x, y, w, h)`.
-
-#### `OcrWord` — Word Geometry & Confidence Hints
-
-- `getText()` — Recognized word string token.
-- `getBoundingBox()` — Bounding box rectangle `Rectangle(x, y, w, h)` on source image.
-- `getConfidence()` — Recognition confidence score (`0.0f` to `1.0f`).
-- `getCenterX()`, `getCenterY()` — Center pixel coordinates (ideal for automated click targets in **[FastRobot](https://github.com/andrestubbe/FastRobot)**).
+| Type | Target / Launcher | Source File | Description |
+|:---|:---|:---|:---|
+| **Interactive Demo** | [`run-demo.bat`](run-demo.bat) | [`Demo.java`](examples/Demo/src/main/java/fastocr/demo/Demo.java) | End-to-end verification of native OCR initialization and text recognition |
+| **Throughput Benchmark** | [`run-benchmark.bat`](run-benchmark.bat) | [`Benchmark.java`](examples/Benchmark/src/main/java/fastocr/benchmark/Benchmark.java) | Formal OpenJDK JMH microbenchmark suite measuring native engine throughput |
 
 ---
 
@@ -142,7 +146,7 @@ JMH_OCR.benchmarkFastOCRInit  thrpt    2  2,947,478          ops/s
 
 ### Option 1: Maven (Recommended)
 
-Add the JitPack repository and the complete dependency stack to your `pom.xml`:
+Add the JitPack repository and the dependency to your `pom.xml`:
 
 ```xml
 <repositories>
@@ -159,34 +163,6 @@ Add the JitPack repository and the complete dependency stack to your `pom.xml`:
         <artifactId>FastOCR</artifactId>
         <version>0.1.1</version>
     </dependency>
-
-    <!-- FastSIMD Hardware Vector Acceleration Engine -->
-    <dependency>
-        <groupId>com.github.andrestubbe</groupId>
-        <artifactId>FastSIMD</artifactId>
-        <version>0.1.3</version>
-    </dependency>
-
-    <!-- FastMemory Aligned Allocator -->
-    <dependency>
-        <groupId>com.github.andrestubbe</groupId>
-        <artifactId>FastMemory</artifactId>
-        <version>0.1.1</version>
-    </dependency>
-
-    <!-- FastPointer Address Wrapper -->
-    <dependency>
-        <groupId>com.github.andrestubbe</groupId>
-        <artifactId>FastPointer</artifactId>
-        <version>0.1.1</version>
-    </dependency>
-
-    <!-- FastImage Vector Processing Engine -->
-    <dependency>
-        <groupId>com.github.andrestubbe</groupId>
-        <artifactId>FastImage</artifactId>
-        <version>0.1.1</version>
-    </dependency>
 </dependencies>
 ```
 
@@ -199,10 +175,6 @@ repositories {
 
 dependencies {
     implementation 'com.github.andrestubbe:FastOCR:0.1.1'
-    implementation 'com.github.andrestubbe:FastSIMD:0.1.3'
-    implementation 'com.github.andrestubbe:FastMemory:0.1.1'
-    implementation 'com.github.andrestubbe:FastPointer:0.1.1'
-    implementation 'com.github.andrestubbe:FastImage:0.1.1'
 }
 ```
 
@@ -220,11 +192,11 @@ dependencies {
 
 ## Platform Support
 
-| Platform | Status |
-|----------|--------|
-| Windows 10/11 (x64) | ✅ Fully Supported (Native Media OCR) |
-| Linux | 🔄 Tesseract Fallback |
-| macOS | 🔄 Tesseract Fallback |
+| Platform | Architecture | Status | Notes |
+|:---|:---|:---|:---|
+| **Windows 10 / 11** | `x86_64` | ✅ Fully Supported | Native `Windows.Media.Ocr` hardware acceleration |
+| **Linux** | `x86_64` | 🔄 Planned | Native Tesseract / Leptonica bridge |
+| **macOS** | `Apple Silicon / Intel` | 🔄 Planned | Native Vision framework / Tesseract bridge |
 
 ---
 
