@@ -1,5 +1,10 @@
 # FastOCR Changelog
 
+## [0.1.2] - 2026-09-19
+- Removed the placeholder native OCR stub from the build.
+- Build the JNI library from the real `fastocr.cpp` Windows.Media.Ocr implementation.
+- Added working-directory handling and root DLL packaging for direct Java resource loading.
+
 ## [0.1.1] - 2026-08-14
 - Integrated native `FastSIMD` (v0.1.3) AVX2 vector image preprocessing engine.
 - Added official JMH benchmark suite measuring 2.94M engine ops/sec.

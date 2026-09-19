@@ -1,5 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
+cd /d "%~dp0"
 set PROJECT_NAME=fastocr
 
 echo ========================================
@@ -53,13 +54,13 @@ if not exist "target\classes\native" mkdir "target\classes\native"
 set "FASTCORE_DIR=%USERPROFILE%\.fastcore\native\%PROJECT_NAME%"
 if not exist "!FASTCORE_DIR!" mkdir "!FASTCORE_DIR!"
 
-cl.exe /nologo /O2 /arch:AVX2 /std:c++17 /MD /LD /D_CRT_SECURE_NO_WARNINGS ^
+cl.exe /nologo /O2 /arch:AVX2 /std:c++17 /await /EHsc /MD /LD /D_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS /D_CRT_SECURE_NO_WARNINGS ^
     /I"!JAVA_HOME!\include" ^
     /I"!JAVA_HOME!\include\win32" ^
     /I"..\FastSIMD\src\main\native" ^
-    src\main\c++\fastocr_stub.cpp ^
+    src\main\c++\fastocr.cpp ^
     /Fo:build\fastocr.obj ^
-    /link /DLL /OUT:release\fastocr.dll user32.lib gdi32.lib shcore.lib advapi32.lib dwmapi.lib
+    /link /DLL /OUT:release\fastocr.dll user32.lib gdi32.lib shcore.lib advapi32.lib dwmapi.lib WindowsApp.lib
 
 if errorlevel 1 (
     echo [ERROR] Compilation failed!
@@ -67,9 +68,11 @@ if errorlevel 1 (
 )
 
 copy /Y release\fastocr.dll build\fastocr.dll >nul
+copy /Y release\fastocr.dll src\main\resources\fastocr.dll >nul
 copy /Y release\fastocr.dll src\main\resources\native\fastocr.dll >nul
 copy /Y release\fastocr.dll src\main\resources\win32-x86-64\fastocr.dll >nul
 copy /Y release\fastocr.dll target\classes\native\fastocr.dll >nul 2>&1
+copy /Y release\fastocr.dll target\classes\fastocr.dll >nul 2>&1
 copy /Y release\fastocr.dll "!FASTCORE_DIR!\fastocr.dll" >nul
 powershell -NoProfile -Command "Unblock-File -Path '!FASTCORE_DIR!\fastocr.dll', 'release\fastocr.dll', 'src\main\resources\native\fastocr.dll' -ErrorAction SilentlyContinue" >nul 2>&1
 

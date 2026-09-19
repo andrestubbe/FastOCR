@@ -1,10 +1,10 @@
-# FastOCR 0.1.1 [ALPHA-2026-08] — Native High-Performance OCR for Java
+# FastOCR 0.1.2 — Native Windows OCR for Java
 
-[![Status](https://img.shields.io/badge/status-0.1.1-brightgreen.svg)](https://github.com/andrestubbe/FastOCR/releases/tag/0.1.1)
+[![Status](https://img.shields.io/badge/status-0.1.2-brightgreen.svg)](https://github.com/andrestubbe/FastOCR/releases/tag/0.1.2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Java](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.java.com)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010+-lightgrey.svg)]()
-[![JitPack](https://img.shields.io/badge/JitPack-0.1.1-green.svg)](https://jitpack.io/#andrestubbe/FastOCR)
+[![JitPack](https://img.shields.io/badge/JitPack-0.1.2-green.svg)](https://jitpack.io/#andrestubbe/FastOCR)
 
 ---
 
@@ -161,7 +161,7 @@ Add the JitPack repository and the dependency to your `pom.xml`:
     <dependency>
         <groupId>com.github.andrestubbe</groupId>
         <artifactId>FastOCR</artifactId>
-        <version>0.1.1</version>
+        <version>0.1.2</version>
     </dependency>
 </dependencies>
 ```
@@ -174,7 +174,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.andrestubbe:FastOCR:0.1.1'
+    implementation 'com.github.andrestubbe:FastOCR:0.1.2'
 }
 ```
 

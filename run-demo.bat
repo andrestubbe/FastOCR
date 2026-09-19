@@ -25,6 +25,6 @@ if %ERRORLEVEL% NEQ 0 (
 echo [3/3] Running Demo...
 cd examples\Demo
 call mvn clean package -DskipTests -q
-java "-Djava.library.path=..\..\release;..\..\src\main\resources\native" -cp "target\demo-0.1.1.jar;..\..\target\FastOCR-0.1.1.jar" fastocr.demo.Demo
+java "-Djava.library.path=..\..\release;..\..\src\main\resources\native" -cp "target\demo-0.1.2.jar;..\..\target\FastOCR-0.1.2.jar" fastocr.demo.Demo
 cd ..\..
 pause

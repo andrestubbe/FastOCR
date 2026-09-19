@@ -40,6 +40,7 @@
 
 #include <jni.h>
 #include <windows.h>
+#include <winrt/base.h>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Media.Ocr.h>
 #include <winrt/Windows.Graphics.Imaging.h>
@@ -73,6 +74,11 @@ namespace winrt {
     using namespace Windows::Media::Ocr;
     using namespace Windows::Graphics::Imaging;
 }
+
+using winrt::com_ptr;
+using Microsoft::WRL::ComPtr;
+using winrt::Windows::Media::Ocr::OcrEngine;
+using winrt::Windows::Graphics::Imaging::SoftwareBitmap;
 
 // Store OcrEngine in a wrapper with proper lifetime management
 struct OcrEngineWrapper {
@@ -247,21 +253,8 @@ JNIEXPORT jlong JNICALL Java_fastocr_FastOCR_createOcrEngine(JNIEnv* env, jclass
     try {
         winrt::init_apartment();
         
-        const char* langStr = env->GetStringUTFChars(language, nullptr);
-        std::wstring langWide = UTF8ToWString(langStr);
-        env->ReleaseStringUTFChars(language, langStr);
-        
-        // Try to create engine for requested language
-        // Note: Language fallback requires C++/WinRT collection fixes in v1.1
-        std::wstring langCode = langWide.empty() ? L"en" : langWide;
-        OcrEngine engine = OcrEngine::TryCreateFromLanguage(
-            winrt::Windows::Globalization::Language(winrt::hstring(langCode)));
-        
-        if (engine == nullptr) {
-            // Fallback to English
-            engine = OcrEngine::TryCreateFromLanguage(
-                winrt::Windows::Globalization::Language(winrt::hstring(L"en")));
-        }
+        (void)language;
+        OcrEngine engine = OcrEngine::TryCreateFromUserProfileLanguages();
         
         if (engine == nullptr) {
             return 0; // Failed to create engine - Windows OCR not available

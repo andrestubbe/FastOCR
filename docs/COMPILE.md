@@ -10,4 +10,6 @@
 compile.bat
 ```
 
-This compiles `fastocr.dll` with MSVC AVX2 flags (`/arch:AVX2 /O2 /D_CRT_SECURE_NO_WARNINGS`) and copies the output DLL to `src/main/resources/native/` and `src/main/resources/win32-x86-64/`.
+This compiles the real `src/main/c++/fastocr.cpp` Windows.Media.Ocr JNI implementation with MSVC C++17/exception handling and AVX2 flags (`/std:c++17 /EHsc /arch:AVX2 /O2 /D_CRT_SECURE_NO_WARNINGS`), then copies the output DLL to the root and architecture-specific resource locations used by the Java loader.
+
+The former `fastocr_stub.cpp` placeholder is no longer part of the build.
